@@ -1,0 +1,108 @@
+en
+conf t
+vl 10
+name 10
+vl 20
+name 20
+int ra fa0/23-24
+sw mo tr
+int ra fa0/1-2
+sw mo acc
+sw acc vl 10
+
+en
+conf t
+vl 10
+name 10
+vl 20
+name 20
+int ra fa0/23-24
+sw mo tr
+int ra fa0/1-2
+sw mo acc
+sw acc vl 20
+
+en
+conf t
+vl 30
+name 30
+vl 40
+name 40
+int ra fa0/23-24
+sw mo tr
+int ra fa0/1-2
+sw mo acc
+sw acc vl 30
+
+en
+conf t
+vl 30
+name 30
+vl 40
+name 40
+int ra fa0/23-24
+sw mo tr
+int ra fa0/1-2
+sw mo acc
+sw acc vl 40
+
+en
+conf t
+int gig0/0
+ip add 192.168.1.154 255.255.255.252
+no sh
+int lo 1
+ip add 8.8.8.8 255.255.255.255
+exit
+ip route 0.0.0.0 0.0.0.0 192.168.1.153
+
+en
+conf t
+int gig0/1
+ip add 192.168.1.153 255.255.255.252
+no sh
+int gig0/0
+ip add 192.168.1.147 255.255.255.248
+no sh
+exit
+ip route 0.0.0.0 0.0.0.0 192.168.1.154
+ip route 192.168.1.128 255.255.255.240 192.168.1.145
+ip route 192.168.1.96 255.255.255.224 192.168.1.145
+ip route 192.168.1.64 255.255.255.224 192.168.1.146
+ip route 192.168.1.0 255.255.255.192 192.168.1.146
+
+en
+conf t
+int gig0/0
+ip add 192.168.1.145 255.255.255.248
+no sh
+int gig0/1
+no sh
+int gig0/1.10
+enca dot1Q 10
+ip add 192.168.1.129 255.255.255.240
+int gig0/1.20
+enca dot1Q 20
+ip add 192.168.1.97 255.255.255.224
+exit
+ip route 0.0.0.0 0.0.0.0 192.168.1.154
+ip route 192.168.1.64 255.255.255.224 192.168.1.146
+ip route 192.168.1.0 255.255.255.192 192.168.1.146
+
+en
+conf t
+int gig0/1
+ip add 192.168.1.146 255.255.255.248
+no sh
+int gig0/0
+no sh
+int gig0/0.30
+enca dot1Q 30
+ip add 192.168.1.65 255.255.255.224
+int gig0/0.20
+enca dot1Q 20
+ip add 192.168.1.1 255.255.255.192
+exit
+ip route 0.0.0.0 0.0.0.0 192.168.1.154
+ip route 192.168.1.128 255.255.255.240 192.168.1.145
+ip route 192.168.1.96 255.255.255.224 192.168.1.145
