@@ -1,0 +1,100 @@
+R2
+
+en
+conf t
+int gig0/0
+ip add 172.16.2.1 255.255.255.0
+no sh
+int lo 2
+ip add 8.8.8.8 255.255.255.255
+int s0/0/1
+ip add 12.0.0.2 255.255.255.0
+no sh
+ex
+router ospf 1
+passive-interface gig0/0
+network 172.16.2.0 0.0.0.255 area 0
+network 8.8.8.8 0.0.0.0 area 0
+network 12.0.0.0 0.0.0.255 area 0
+default-information originate
+area 0 auth message-digest
+ex
+ip route 0.0.0.0 0.0.0.0 lo 2
+int se0/0/1
+ip ospf message-digest-key 1 md5 cisco
+
+R1
+
+en
+conf t
+int se0/0/1
+ip add 12.0.0.1 255.255.255.0
+no sh
+int gig0/0
+ip add 134.0.0.1 255.255.255.0
+no sh
+int lo 2
+ip add 1.1.1.1 255.255.255.255
+ex
+router ospf 1
+network 1.1.1.1 0.0.0.0 area 0
+network 12.0.0.0 0.0.0.255 area 0
+network 134.0.0.0 0.0.0.255 area 0
+area 0 auth message-digest
+ex
+int gig0/0
+ip ospf message-digest-key 1 md5 cisco
+int se0/0/0
+ip ospf message-digest-key 1 md5 cisco
+
+
+R3
+
+en
+conf t
+int gig0/0
+ip add 134.0.0.3 255.255.255.0
+no sh
+int lo 3
+ip add 3.3.3.3 255.255.255.255
+ex
+router ospf 1
+network 3.3.3.3 0.0.0.0 area 0
+network 134.0.0.0 0.0.0.255 area 0
+area 0 auth message-digest
+ex
+int gig0/0
+ip ospf message-digest-key 1 md5 cisco
+
+R4
+
+en
+conf t
+int gig0/1
+ip add 134.0.0.4 255.255.255.0
+no sh
+int gig0/0
+ip add 45.0.0.4 255.255.255.0
+no sh
+int lo 4
+ip add 4.4.4.4 255.255.255.255
+ex
+router ospf 1
+network 4.4.4.4 0.0.0.0 area 0
+network 134.0.0.0 0.0.0.255 area 0
+network 45.0.0.0 0.0.0.255 area 1
+area 0 auth message-digest
+ex
+int gig0/1
+ip ospf message-digest-key 1 md5 cisco
+
+R5
+
+en
+conf t
+int gig0/1
+ip add 45.0.0.5 255.255.255.0
+no sh
+ex
+router ospf 1
+network 45.0.0.0 0.0.0.255 area 1
